@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gybasoft Camera Control</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --card: #1a1d27;
+      --border: #2a2e3b;
+      --text: #e4e6ed;
+      --muted: #9ca3af;
+      --accent: #6366f1;
+      --accent-hover: #818cf8;
+      --danger: #ef4444;
+      --success: #22c55e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .category {
+      margin-bottom: 18px;
+    }
+
+    .category-title {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .cam-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    button {
+      background: #2a2e3b;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    button:hover {
+      background: #343848;
+      border-color: #4b5163;
+    }
+
+    button.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    button.danger {
+      background: #3f1a1a;
+      border-color: #7f1d1d;
+    }
+
+    button.danger:hover {
+      background: #5c2222;
+    }
+
+    .focus-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background: #12141c;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .slider-group {
+      margin-bottom: 16px;
+    }
+
+    .slider-group label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .toggle-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .status {
+      margin-top: 20px;
+      padding: 12px 16px;
+      background: #12141c;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .status.success { color: var(--success); }
+    .status.error { color: var(--danger); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Gybasoft Camera Control</h1>
+    <p class="subtitle">Remote control panel for your Roblox show</p>
+
+    <div class="grid">
+      <!-- Left column: Cameras -->
+      <div class="card">
+        <h2>Cameras</h2>
+
+        <div class="category">
+          <div class="category-title">Static → Arena</div>
+          <div class="cam-grid" id="arena-cams">
+            <button onclick="changeCam('Static', 'Arena')">Arena</button>
+            <button onclick="changeCam('Static', 'Back Left')">Back Left</button>
+            <button onclick="changeCam('Static', 'Back Left 2')">Back Left 2</button>
+            <button onclick="changeCam('Static', 'Back Right')">Back Right</button>
+            <button onclick="changeCam('Static', 'Back Right 2')">Back Right 2</button>
+            <button onclick="changeCam('Static', 'Crane Camera Back')">Crane Camera Back</button>
+            <button onclick="changeCam('Static', 'Flags')">Flags</button>
+            <button onclick="changeCam('Static', 'TV')">TV</button>
+            <button onclick="changeCam('Static', 'TV 2')">TV 2</button>
+            <button onclick="changeCam('Static', 'Tunnel Middle')">Tunnel Middle</button>
+          </div>
+        </div>
+
+        <div class="category">
+          <div class="category-title">Moving</div>
+          <div class="cam-grid">
+            <button onclick="changeCam('Moving', 'Test1Curve')">Test1Curve</button>
+            <button onclick="changeCam('Moving', 'To stage')">To stage</button>
+          </div>
+        </div>
+
+        <div class="category">
+          <div class="category-title">Drones</div>
+          <div class="cam-grid">
+            <button onclick="changeCam('Drones', 'David')">David</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column: Focus + Effects -->
+      <div>
+        <div class="card" style="margin-bottom: 20px;">
+          <h2>Focus</h2>
+          <div class="focus-row">
+            <input type="text" id="username" placeholder="Enter username...">
+            <button onclick="focusPlayer()">Focus</button>
+            <button class="danger" onclick="stopFocus()">Stop</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Effects</h2>
+
+          <div class="slider-group">
+            <label>FOV <span id="fov-val">70</span></label>
+            <input type="range" min="20" max="120" value="70" id="fov" oninput="updateFov(this.value)">
+          </div>
+
+          <div class="slider-group">
+            <label>Blur <span id="blur-val">0</span></label>
+            <input type="range" min="0" max="50" value="0" id="blur" oninput="updateBlur(this.value)">
+          </div>
+
+          <div class="slider-group">
+            <label>Saturation <span id="sat-val">0</span></label>
+            <input type="range" min="-100" max="100" value="0" id="saturation" oninput="updateSaturation(this.value)">
+          </div>
+
+          <div class="slider-group">
+            <label>Tilt <span id="tilt-val">0°</span></label>
+            <input type="range" min="-45" max="45" value="0" id="tilt" oninput="updateTilt(this.value)">
+          </div>
+
+          <div class="slider-group">
+            <label>Shake <span id="shake-val">0</span></label>
+            <input type="range" min="0" max="20" value="0" id="shake" oninput="updateShake(this.value)">
+          </div>
+
+          <div class="toggle-row">
+            <button onclick="toggleBlackout()">Blackout</button>
+            <button onclick="toggleBars()">Bars</button>
+          </div>
+
+          <div class="slider-group">
+            <label>Bar Size <span id="barsize-val">20%</span></label>
+            <input type="range" min="0" max="50" value="20" id="barsize" oninput="updateBarSize(this.value)">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status" id="status">Ready</div>
+  </div>
+
+  <script>
+    const API_URL = window.location.origin;
+    const SECRET_KEY = "56473857438564738532hvuhrfuj"; // ← PUT YOUR REAL KEY HERE
+
+    async function sendCommand(cmd) {
+      const status = document.getElementById("status");
+      status.textContent = "Sending...";
+      status.className = "status";
+
+      try {
+        const res = await fetch(API_URL + "/command", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": SECRET_KEY
+          },
+          body: JSON.stringify(cmd)
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          status.textContent = "✓ Command sent: " + cmd.type;
+          status.className = "status success";
+        } else {
+          status.textContent = "Error: " + (data.error || "Unknown");
+          status.className = "status error";
+        }
+      } catch (err) {
+        status.textContent = "Failed to send: " + err.message;
+        status.className = "status error";
+      }
+    }
+
+    function changeCam(type, name) {
+      sendCommand({ type: "ChangeCam", camType: type, name: name });
+    }
+
+    function focusPlayer() {
+      const username = document.getElementById("username").value.trim();
+      if (!username) return alert("Enter a username");
+      sendCommand({ type: "Focus", username: username });
+    }
+
+    function stopFocus() {
+      sendCommand({ type: "Focus", username: "" });
+    }
+
+    function updateFov(val) {
+      document.getElementById("fov-val").textContent = val;
+      sendCommand({ type: "ChangeFov", value: Number(val), time: 0.3 });
+    }
+
+    function updateBlur(val) {
+      document.getElementById("blur-val").textContent = val;
+      sendCommand({ type: "ChangeBlur", value: Number(val), time: 0.3 });
+    }
+
+    function updateSaturation(val) {
+      document.getElementById("sat-val").textContent = val;
+      sendCommand({ type: "ChangeSaturation", value: Number(val) / 100, time: 0.3 });
+    }
+
+    function updateTilt(val) {
+      document.getElementById("tilt-val").textContent = val + "°";
+      sendCommand({ type: "ChangeTilt", value: Number(val), time: 0.3 });
+    }
+
+    function updateShake(val) {
+      document.getElementById("shake-val").textContent = val;
+      sendCommand({ type: "ChangeShake", value: Number(val) });
+    }
+
+    function toggleBlackout() {
+      sendCommand({ type: "ChangeBlackout", enabled: true }); // simple toggle for now
+    }
+
+    function toggleBars() {
+      sendCommand({ type: "ChangeBars", enabled: true });
+    }
+
+    function updateBarSize(val) {
+      document.getElementById("barsize-val").textContent = val + "%";
+      sendCommand({ type: "ChangeBarSize", value: Number(val), time: 0.3 });
+    }
+  </script>
+</body>
+</html>
